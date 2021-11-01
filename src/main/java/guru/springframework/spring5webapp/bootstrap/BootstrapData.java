@@ -2,8 +2,10 @@ package guru.springframework.spring5webapp.bootstrap;
 
 import guru.springframework.spring5webapp.domain.Author;
 import guru.springframework.spring5webapp.domain.Book;
+import guru.springframework.spring5webapp.domain.Publisher;
 import guru.springframework.spring5webapp.repositories.AuthorRepository;
 import guru.springframework.spring5webapp.repositories.BookRepository;
+import guru.springframework.spring5webapp.repositories.PublisherRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -11,10 +13,12 @@ import org.springframework.stereotype.Component;
 public class BootstrapData implements CommandLineRunner {
     private final AuthorRepository authorRepository;
     private final BookRepository bookRepository;
+    private final PublisherRepository publisherRepository;
 
-    public BootstrapData(AuthorRepository authorRepository, BookRepository bookRepository) {
+    public BootstrapData(AuthorRepository authorRepository, BookRepository bookRepository, PublisherRepository publisherRepository) {
         this.authorRepository = authorRepository;
         this.bookRepository = bookRepository;
+        this.publisherRepository = publisherRepository;
     }
 
     @Override
@@ -35,5 +39,14 @@ public class BootstrapData implements CommandLineRunner {
 
         System.out.println("Started Bootstrap");
         System.out.println("Number of books in repository " + bookRepository.count());
+
+        Publisher publisher1 = new Publisher("publisherName");
+        publisherRepository.save(publisher1);
+        publisher1.getBooks().add(noEJB);
+        noEJB.setPublisher(publisher1);
+        bookRepository.save(noEJB);
+        publisherRepository.save(publisher1);
+        System.out.println(publisher1.toString());
+
     }
 }
